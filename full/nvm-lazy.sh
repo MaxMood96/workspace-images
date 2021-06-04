@@ -12,7 +12,9 @@ if [[ -s "$NVM_DIR/nvm.sh" ]]; then
     # Lazy-loading nvm + npm on node globals
     load_nvm () {
         # shellcheck disable=SC1091,SC1090
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        # shellcheck disable=SC1091,SC1090
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     }
 
     # Making node global trigger the lazy loading
@@ -20,6 +22,4 @@ if [[ -s "$NVM_DIR/nvm.sh" ]]; then
         # shellcheck disable=SC2128
         eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
     done
-
-    export PATH="$PATH:$HOME/.yarn/bin"
 fi

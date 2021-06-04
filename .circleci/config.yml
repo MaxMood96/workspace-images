@@ -3,14 +3,16 @@ version: 2.1
 jobs:
   pre-commit:
     docker:
-      - image: docker:stable
+      - image: ubuntu:20.10
     steps:
       - checkout
       - attach_workspace:
           at: .
       - run:
-          command: pre-commit run --all-files
-          name: Run pre-commit tests
+          name: Run pre-commit checks
+          command: |
+            apt update && apt install -y shellcheck pre-commit git
+            pre-commit run --all-files
 
   workspace-base:
     docker:
