@@ -29,7 +29,7 @@ combiner:
         - lang-rust
         - tool-brew
         - tool-nginx
-        - tool-nix:2.3.14
+        - tool-nix:2.6.0
     - name: full-vnc
       ref:
       - full
@@ -45,11 +45,13 @@ combiner:
       - base
       chunks:
         - lang-node:17.4.0
+        - tool-chrome
     - name: node-lts
       ref:
       - base
       chunks:
         - lang-node:16.13.2
+        - tool-chrome
     - name: python
       ref:
       - base
@@ -70,25 +72,24 @@ combiner:
       - base
       chunks:
         - lang-rust
-    - name: dotnet-vnc
+    - name: dotnet
       ref:
-      - base
+      - full
       chunks:
-        - tool-vnc
         - tool-dotnet
     - name: postgresql
       ref:
-      - base
+      - full
       chunks:
         - tool-postgresql
     - name: mysql
       ref:
-      - base
+      - full
       chunks:
         - tool-mysql
     - name: mongodb
       ref:
-      - base
+      - full
       chunks:
         - tool-mongodb
     - name: java-11

@@ -5,9 +5,6 @@
 
 Ready-to-use Docker images for [gitpod.io](https://www.gitpod.io) workspaces. All images are available on Docker Hub under [gitpod/*](https://hub.docker.com/u/gitpod).
 
-PRs are very welcome! ❤️
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/gitpod-io/workspace-images)
 
 ## 📢 Announcements
 
@@ -22,18 +19,12 @@ The old build process which used dazzle v1 and CircleCI is deprecated, and will 
 ### 📷 Images we'll upgrade
 
 1. gitpod/workspace-full ✅
-1. gitpod/workspace-base
-1. gitpod/workspace-dotnet
-1. gitpod/workspace-dotnet-lts
-1. gitpod/workspace-dotnet-lts-vnc
-1. gitpod/workspace-dotnet-vnc
-1. gitpod/workspace-flutter
-1. gitpod/workspace-full-vnc
-1. gitpod/workspace-gecko
-1. gitpod/workspace-mongodb
-1. gitpod/workspace-mysql
-1. gitpod/workspace-postgres
-1. gitpod/workspace-wasm
+1. gitpod/workspace-base ✅
+1. gitpod/workspace-dotnet ✅
+1. gitpod/workspace-full-vnc ✅
+1. gitpod/workspace-mongodb ✅
+1. gitpod/workspace-mysql ✅
+1. gitpod/workspace-postgres ✅
 
 ### 🆕 Images
 
@@ -41,22 +32,29 @@ These are lightweight compared to `gitpod/workspace-full`.
 
 Each contains a set of chunks: a common base, a language, and includes Docker and Tailscale.
 
-1. gitpod/workspace-c
-1. gitpod/workspace-clojure
-1. gitpod/workspace-go
-1. gitpod/workspace-java-11
-1. gitpod/workspace-java-17
-1. gitpod/workspace-node
-1. gitpod/workspace-node-lts
-1. gitpod/workspace-python
-1. gitpod/workspace-ruby
-1. gitpod/workspace-rust
+1. gitpod/workspace-c ✅
+1. gitpod/workspace-clojure ✅
+1. gitpod/workspace-go ✅
+1. gitpod/workspace-java-11 ✅
+1. gitpod/workspace-java-17 ✅
+1. gitpod/workspace-node ✅
+1. gitpod/workspace-node-lts ✅
+1. gitpod/workspace-python ✅
+1. gitpod/workspace-ruby-2 ✅
+1. gitpod/workspace-ruby-3 ✅
+1. gitpod/workspace-rust ✅
 
 ### 🎬 No upgrade planned
 
 These images are no longer being published, and not planned for Upgrade:
 
 1. gitpod/workspace-images-dazzle
+1. gitpod/workspace-dotnet-vnc
+1. gitpod/workspace-dotnet-lts
+1. gitpod/workspace-dotnet-lts-vnc
+1. gitpod/workspace-flutter
+1. gitpod/workspace-gecko
+1. gitpod/workspace-wasm
 1. gitpod/workspace-firefox
 1. gitpod/workspace-full-dazzle
 1. gitpod/workspace-mysql-8
@@ -65,3 +63,9 @@ These images are no longer being published, and not planned for Upgrade:
 1. gitpod/workspace-rethinkdb
 1. gitpod/workspace-thin
 1. gitpod/workspace-webassembly
+
+## Contributing
+
+You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/gitpod-io/workspace-images)

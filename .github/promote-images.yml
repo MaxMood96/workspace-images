@@ -1,5 +1,24 @@
-# for now we intentionally put a hardcoded tag. Going forward we can make this empty to sync all tags. This is hardcoded so we don't endup updating the latest tag
-europe-docker.pkg.dev/gitpod-artifacts/docker-dev:
-  images:
-    workspace-full:
-    - 2022-01-18-18-10-37
+# Sync all the iamges that are tagged using date time stamp
+# format +%Y-%m-%d-%H-%M-%S e.g. 2022-02-22-10-10-54.
+# Use simple regex for readability. Since we tag all images with year
+# We use a regex rule: Any tag that starts with '20'.
+"europe-docker.pkg.dev/gitpod-artifacts/docker-dev":
+  images-by-tag-regex:
+    workspace-base: "20.*"
+    workspace-c: "20.*"
+    workspace-clojure: "20.*"
+    workspace-full: "20.*"
+    workspace-full-vnc: "20.*"
+    workspace-go: "20.*"
+    workspace-node: "20.*"
+    workspace-node-lts: "20.*"
+    workspace-python: "20.*"
+    workspace-ruby-2: "20.*"
+    workspace-ruby-3: "20.*"
+    workspace-rust: "20.*"
+    workspace-dotnet: "20.*"
+    workspace-postgresql: "20.*"
+    workspace-mysql: "20.*"
+    workspace-mongodb: "20.*"
+    workspace-java-11: "20.*"
+    workspace-java-17: "20.*"

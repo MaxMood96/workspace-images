@@ -1,16 +1,15 @@
-name: Sync to Docker Hub
+name: Publish latest images to Docker Hub
 
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'The tag to apply to the image'
-        required: true
 
 jobs:
-  # Sync container images between the GCP Artifact registry and Docker Hub
-  # To implement manual approvals, the workflow uses an Environment.
-  promote:
+  # Sync the 'latest' tag from GAR to Docker Hub
+  #
+  # From your GitHub repo clock Settings. In the left menu, click Environments.
+  # Click New environment, set the name production, and click Configure environment.
+  # Check the "Required reviewers" box and enter at least one user or team name.
+  promote-latest:
     runs-on: ubuntu-latest
     environment: "production"
     permissions:
@@ -18,15 +17,20 @@ jobs:
       id-token: "write"
     env:
       WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
-      SOURCE_IMAGE_REGISTRY: europe-docker.pkg.dev
+      GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
+      DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
-      DEST_IMAGE_REGISTRY: registry.hub.docker.com
 
     steps:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v3
         with:
           repository: gitpod-io/workspace-images
+
+      - name: 🔧 Setup tools
+        run: |
+          sudo apt-get install python3-pip
+          sudo pip3 install yq
 
       - name: 🔆 Install skopeo
         run: |
@@ -50,22 +54,23 @@ jobs:
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
-      - name: ✍🏽 Configuring Skopeo for Google Artifact Registry
+      - name: ✍🏽 Login to GAR using skopeo
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.SOURCE_IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
 
-      - name: ✍🏽 Configuring Skopeo for Docker Hub
+      - name: ✍🏽 Login to Docker Hub using skopeo
         env:
-          docker_user: ${{secrets.DOCKERHUB_USER_NAME}}
-          docker_password: ${{secrets.DOCKERHUB_ACCESS_TOKEN}}
+          docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
+          docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
         run: |
-          sudo skopeo login -u ${{env.docker_user}} --password=${{env.docker_password}} https://${{env.DEST_IMAGE_REGISTRY}}
+          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
 
-      - name: 🐳 Sync images to Docker Hub
-        env:
-          IMAGE_TAG: ${{github.events.input.tag}}
+      - name: 🐳 Sync latest tag of images to Docker Hub
         run: |
-          sudo skopeo sync \
-            --src docker \
-            --dest docker \
-            ${{env.SOURCE_IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev/workspace-full:$IMAGE_TAG ${{env.DEST_IMAGE_REGISTRY}}/gitpod
+          IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
+          for IMAGE in $IMAGES;
+          do
+            sudo skopeo copy \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/$IMAGE:latest \
+            docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
+          done
