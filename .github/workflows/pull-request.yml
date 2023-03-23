@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: gitpod-io/workspace-images
 
